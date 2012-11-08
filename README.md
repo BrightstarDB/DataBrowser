@@ -1,4 +1,4 @@
 DataBrowser
 ===========
 
-A browser for navigating and exploring data on the web.
+A Windows 8 application for navigating and exploring data on the web.
