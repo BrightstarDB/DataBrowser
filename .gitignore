@@ -1,0 +1,21 @@
+# git ignore file
+*.suo
+*.xnb
+*.exe
+*.user
+*.cachefile
+*.cache
+*.pdb
+*thumbs.db
+*.vsmdi
+*.bak
+
+src/TestResults/
+src/commands.txt
+src/_ReSharper*
+
+# All bin and obj folders
+[Bb]in/
+[Oo]bj/
+
+

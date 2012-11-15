@@ -1,0 +1,31 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DataBrowser.Common">
+
+    <DataTemplate x:Key="LiteralPropertyTemplate">
+        <StackPanel Margin="5" Orientation="Horizontal">
+            <TextBlock Text="{Binding PropertyName}" Foreground="White" Style="{StaticResource TitleTextStyle}" Width="200" FontSize="22" FontFamily="Verdana"/>
+            <TextBlock Text="{Binding PropertyValue}" Foreground="White" Style="{StaticResource CaptionTextStyle}" TextWrapping="Wrap" FontSize="22" FontFamily="Verdana" Width="600"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ClickableLiteralPropertyTemplate">
+        <StackPanel Margin="5" Orientation="Horizontal">
+            <TextBlock Text="{Binding PropertyName}" Foreground="White" Style="{StaticResource TitleTextStyle}" Width="200" FontSize="22" FontFamily="Verdana"/>
+            <TextBlock Foreground="White" Style="{StaticResource CaptionTextStyle}" TextWrapping="Wrap" FontSize="22" FontFamily="Verdana" Width="600">                
+                <Underline><Run Text="{Binding PropertyValue}"/></Underline>
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="RelatedResourcePropertyTemplate">
+        <StackPanel Margin="5" Orientation="Horizontal">
+            <TextBlock Text="{Binding PropertyName}" Foreground="White" Style="{StaticResource TitleTextStyle}" Width="200" FontSize="22" FontFamily="Verdana"/>
+            <TextBlock Foreground="White" Style="{StaticResource CaptionTextStyle}" TextWrapping="Wrap" FontSize="22" FontFamily="Verdana" Width="600">                
+                <Underline><Run Text="{Binding PropertyValueName}"/></Underline>
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+
+</ResourceDictionary>

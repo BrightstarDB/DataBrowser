@@ -1,0 +1,28 @@
+﻿<Application
+    x:Class="DataBrowser.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DataBrowser">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <!-- 
+                    Styles that define common aspects of the platform look and feel
+                    Required by Visual Studio project and item templates
+                 -->
+                <ResourceDictionary Source="Common/StandardStyles.xaml"/>
+                <ResourceDictionary Source="Common/DataBrowserStyles.xaml"/>
+
+                <ResourceDictionary>
+                    <SolidColorBrush x:Key="Web3BrowserBackgroundBrush" Color="White" />
+                    <Style x:Key="Web3BrowserLayoutRootStyle" TargetType="Panel" BasedOn="{StaticResource LayoutRootStyle}">
+                        <Setter Property="Background" Value="{StaticResource Web3BrowserBackgroundBrush}"/>
+                    </Style>
+                </ResourceDictionary>
+
+            </ResourceDictionary.MergedDictionaries> 
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
