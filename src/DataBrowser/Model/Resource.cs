@@ -16,7 +16,7 @@ namespace DataBrowser.Model
         public List<Property> Properties { get; set; }
         public String Title { get; set; }
         public IProvider DataProvider { get; private set; }
-        // public ResourceType ResourceType { get; private set; }
+        public Uri Thumbnail { get; set; }
 
         public Resource(IProvider provider, ResourceType type)
         {

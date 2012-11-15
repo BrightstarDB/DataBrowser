@@ -10,6 +10,7 @@ namespace DataBrowser
 {
     public static class XDocumentSparqlExtensions
     {
+
         private static readonly XNamespace SparqlResultsNamespace = "http://www.w3.org/2005/sparql-results#";
 
         ///<summary>

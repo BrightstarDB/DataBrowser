@@ -8,7 +8,6 @@ using DataBrowser.Providers;
 
 namespace DataBrowser.Model
 {
-
     public class ResourceType : Resource
     {
         public string Image { get; set; }
