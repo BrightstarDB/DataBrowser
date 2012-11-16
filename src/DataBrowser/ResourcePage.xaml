@@ -40,8 +40,8 @@
         <TextBlock x:Name="LoadingMessageTextBlock" Grid.Row="1" HorizontalAlignment="Left" Width="1172" Margin="116,74,0,434" FontFamily="Verdana" FontSize="50" TextAlignment="Left" />
 
         <ListView x:Name="PropertyBox" IsItemClickEnabled="true" ItemClick="PropertyBox_ItemClick_1" 
-                  HorizontalAlignment="Left" Height="553" Margin="134,24,0,0" Grid.Row="1" VerticalAlignment="Top" Width="1105" SelectionMode="None" ItemTemplate="{StaticResource SelectingTemplate}"/>
-
+                  HorizontalAlignment="Left" Margin="134,24,0,0" Grid.Row="1" VerticalAlignment="Top" Width="1105" 
+                  SelectionMode="None" ItemTemplate="{StaticResource SelectingTemplate}"/>
 
 
         <VisualStateManager.VisualStateGroups>

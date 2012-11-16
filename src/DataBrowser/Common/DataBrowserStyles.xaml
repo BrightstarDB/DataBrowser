@@ -5,15 +5,19 @@
 
     <DataTemplate x:Key="LiteralPropertyTemplate">
         <StackPanel Margin="5" Orientation="Horizontal">
-            <TextBlock Text="{Binding PropertyName}" Foreground="White" Style="{StaticResource TitleTextStyle}" Width="200" FontSize="22" FontFamily="Verdana"/>
-            <TextBlock Text="{Binding PropertyValue}" Foreground="White" Style="{StaticResource CaptionTextStyle}" TextWrapping="Wrap" FontSize="22" FontFamily="Verdana" Width="600"/>
+            <TextBlock Text="{Binding PropertyName}" Foreground="White" Style="{StaticResource TitleTextStyle}" 
+                       Width="250" FontSize="20" FontFamily="Verdana"/>
+            <TextBlock Text="{Binding PropertyValue}" Foreground="White" Style="{StaticResource CaptionTextStyle}" 
+                       TextWrapping="Wrap" Margin="10,0,0,0" FontSize="20" FontFamily="Verdana" Width="800"/>
         </StackPanel>
     </DataTemplate>
 
     <DataTemplate x:Key="ClickableLiteralPropertyTemplate">
         <StackPanel Margin="5" Orientation="Horizontal">
-            <TextBlock Text="{Binding PropertyName}" Foreground="White" Style="{StaticResource TitleTextStyle}" Width="200" FontSize="22" FontFamily="Verdana"/>
-            <TextBlock Foreground="White" Style="{StaticResource CaptionTextStyle}" TextWrapping="Wrap" FontSize="22" FontFamily="Verdana" Width="600">                
+            <TextBlock Text="{Binding PropertyName}" Foreground="White" Style="{StaticResource TitleTextStyle}" 
+                       Width="250" FontSize="20" FontFamily="Verdana"/>
+            <TextBlock Foreground="White" Style="{StaticResource CaptionTextStyle}" TextWrapping="Wrap" 
+                       FontSize="20" Margin="10,0,0,0" FontFamily="Verdana" Width="800">                
                 <Underline><Run Text="{Binding PropertyValue}"/></Underline>
             </TextBlock>
         </StackPanel>
@@ -21,8 +25,10 @@
 
     <DataTemplate x:Key="RelatedResourcePropertyTemplate">
         <StackPanel Margin="5" Orientation="Horizontal">
-            <TextBlock Text="{Binding PropertyName}" Foreground="White" Style="{StaticResource TitleTextStyle}" Width="200" FontSize="22" FontFamily="Verdana"/>
-            <TextBlock Foreground="White" Style="{StaticResource CaptionTextStyle}" TextWrapping="Wrap" FontSize="22" FontFamily="Verdana" Width="600">                
+            <TextBlock Text="{Binding PropertyName}" Foreground="White" Style="{StaticResource TitleTextStyle}" 
+                       Width="250" FontSize="20" FontFamily="Verdana"/>
+            <TextBlock Foreground="White" Style="{StaticResource CaptionTextStyle}" TextWrapping="Wrap" 
+                       FontSize="20" Margin="10,0,0,0" FontFamily="Verdana" Width="800">                
                 <Underline><Run Text="{Binding PropertyValueName}"/></Underline>
             </TextBlock>
         </StackPanel>
