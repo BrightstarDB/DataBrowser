@@ -15,7 +15,15 @@ namespace DataBrowser.Providers
 {
     public class ODataProvider : IProvider
     {
+        /// <summary>
+        /// The OData Endpoint
+        /// </summary>
         private readonly string _endpoint;
+
+        /// <summary>
+        /// The URL of an optional OData annotations document
+        /// </summary>
+        private readonly string _annotationsUrl;
 
         public ODataProvider(string endpoint)
         {
@@ -154,19 +162,44 @@ namespace DataBrowser.Providers
             // process simple properties
             var properties = new List<Property>();
 
-            var propertyElements = res.ElementExtensions;
-            foreach (var item in propertyElements)
+            if (res.Content.Type.Equals("application/xml"))
             {
-                if (item.NodeName.ToLower().Equals("properties"))
+                var xml = res.Content.Xml;
+                foreach (var cn in xml.FirstChild.ChildNodes)
                 {
-                    foreach (var prop in item.ElementExtensions)
+                    try
                     {
-                        if (string.IsNullOrEmpty(prop.NodeValue)) continue; 
+                        if (cn.FirstChild == null || cn.FirstChild.NodeValue == null) continue;
+                        var val = cn.FirstChild.NodeValue.ToString();
+                        if (string.IsNullOrEmpty(val)) continue;
                         var property = new Property(this, null);
-                        property.PropertyName = prop.NodeName;
-                        property.PropertyValue = prop.NodeValue;
+                        property.PropertyName = cn.LocalName.ToString();
+                        property.PropertyValue = val;
                         property.IsLiteral = true;
                         properties.Add(property);
+                    }
+                    catch (Exception ex)
+                    {
+                        var msg = ex.Message;
+                    }
+                }
+            }
+            else
+            {
+                var propertyElements = res.ElementExtensions;
+                foreach (var item in propertyElements)
+                {
+                    if (item.NodeName.ToLower().Equals("properties"))
+                    {
+                        foreach (var prop in item.ElementExtensions)
+                        {
+                            if (string.IsNullOrEmpty(prop.NodeValue)) continue;
+                            var property = new Property(this, null);
+                            property.PropertyName = prop.NodeName;
+                            property.PropertyValue = prop.NodeValue;
+                            property.IsLiteral = true;
+                            properties.Add(property);
+                        }
                     }
                 }
             }
