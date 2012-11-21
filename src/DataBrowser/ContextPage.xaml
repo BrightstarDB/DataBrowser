@@ -27,10 +27,14 @@
 
         <DataTemplate x:Key="GridItemTemplate">
             <Grid HorizontalAlignment="Left" Width="200" Height="200" Margin="5">
-                <!-- Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
-                    <Image Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
-                </Border -->
-                <StackPanel Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
+                <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
+                    <Image Stretch="UniformToFill">
+                        <Image.Source>
+                            <BitmapImage UriSource="{Binding Image}" />
+                        </Image.Source>
+                    </Image>
+                </Border>
+                <StackPanel>
                     <TextBlock Text="{Binding Title}" Foreground="White" Style="{StaticResource GridTitleTextStyle}" />
                 </StackPanel>
             </Grid>

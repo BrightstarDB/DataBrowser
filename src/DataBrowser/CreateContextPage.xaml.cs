@@ -55,9 +55,13 @@ namespace DataBrowser
         private void CreateContextButtonClick(object sender, RoutedEventArgs e)
         {
             IProvider provider = null;
-            if (this.TypeComboBox.SelectedItem.ToString().ToLower().Equals("odata"))
+            if (((ComboBoxItem)this.TypeComboBox.SelectedItem).Content.ToString().ToLower().Equals("odata"))
             {
                 provider = new ODataProvider(this.UrlTextBox.Text);
+            }
+            else
+            {
+                provider = new SparqlEndpointProvider(this.UrlTextBox.Text);
             }
             var ctx = new Context(this.NameTextBox.Text, this.DescriptionTextBox.Text, provider);
 

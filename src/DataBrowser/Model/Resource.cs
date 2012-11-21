@@ -16,12 +16,13 @@ namespace DataBrowser.Model
         public List<Property> Properties { get; set; }
         public String Title { get; set; }
         public IProvider DataProvider { get; private set; }
-        public Uri Thumbnail { get; set; }
+        public Uri Image { get; set; }
 
         public Resource(IProvider provider, ResourceType type)
         {
             DataProvider = provider;
             Type = type;
+            Image = new Uri("http://www.brightstardb.com/images/logo.png");
         }
             
     }

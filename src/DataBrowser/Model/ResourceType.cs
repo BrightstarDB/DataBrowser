@@ -10,7 +10,6 @@ namespace DataBrowser.Model
 {
     public class ResourceType : Resource
     {
-        public string Image { get; set; }
         public string InstanceImage { get; set; }
         public ResourceType(IProvider provider) : base(provider, null){} 
     }

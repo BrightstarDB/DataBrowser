@@ -85,17 +85,30 @@ namespace DataBrowser.Providers
         {
             var properties = new List<Property>();
             var query = string.Format(GetPropertiesQuery, resource.Identity.AbsoluteUri);
+
             var doc = await DoGetAsync(query);
+
+            // this collection maps the type of properties that have more than three entries to
+            // the collection query it uses.
+            var collectionProperties = new Dictionary<string, string>();
+
             foreach (var row in doc.SparqlResultRows())
             {
                 var type = row.GetColumnValue("prop").ToString();
                 var value = row.GetColumnValue("value").ToString();
                 var valueName = row.GetColumnValue("valueName") as string;
-                if (!string.IsNullOrEmpty(value))
+                var isLiteral = row.IsLiteral("value");
+                if (!isLiteral && String.IsNullOrEmpty(valueName))
+                {
+                    valueName = Utils.GetDisplayNameFromUrl(value);
+                    if (string.IsNullOrEmpty(valueName)) continue;
+                }
+
+                if (!string.IsNullOrEmpty(value) && !type.Equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"))
                 {
                     properties.Add(new Property(this, null)
                     {
-                        IsLiteral = !Uri.IsWellFormedUriString(value, UriKind.Absolute),
+                        IsLiteral = isLiteral,
                         PropertyType = new ResourceType(this) { Identity = new Uri(type) },
                         PropertyName = Utils.GetDisplayNameFromUrl(type),
                         PropertyValue = value,

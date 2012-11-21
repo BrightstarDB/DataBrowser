@@ -26,9 +26,9 @@ namespace DataBrowser.Model
                                                     new ODataProvider("http://odata.netflix.com/v2/Catalog/")),
                                         new Context("WebNodes", "WedNodes OData endpoint",
                                                     new ODataProvider("http://demo.webnodes.com/odata/")),
-                                        new Context("Glimt Event Data", "Event data from glimt",
+                                        new Context("Local B*", "Testing Sparql",
                                                     new SparqlEndpointProvider(
-                                                        "http://brightstardbvm1.cloudapp.net/sparql/eventdata/sparql"))
+                                                        "http://localhost:8081/bs370/sparql"))
                                     };
                 }
 
