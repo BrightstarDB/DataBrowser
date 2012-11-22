@@ -25,9 +25,87 @@ namespace DataBrowser.Providers
         /// </summary>
         private readonly string _annotationsUrl;
 
-        public ODataProvider(string endpoint)
+        /// <summary>
+        /// A set of annotations to help with rendering
+        /// </summary>
+        private List<Annotation> _annotations;
+
+        /// <summary>
+        /// Indicates if the provider is initialised
+        /// </summary>
+        public bool IsIntialised { get; internal set; }
+
+        /// <summary>
+        /// Maps container collection names to types
+        /// </summary>
+        private Dictionary<string, string> _collectionToTypeMappings; 
+
+        public ODataProvider(string endpoint, string annotationsUrl = null)
         {
             _endpoint = endpoint;
+            _annotationsUrl = annotationsUrl;
+            _annotations = new List<Annotation>();
+            _collectionToTypeMappings = new Dictionary<string, string>();
+            Initialise();
+        }
+
+        private async Task<bool> Initialise()
+        {
+            await ParseMetadata();
+            await ParseAnnotations();
+            IsIntialised = true;
+            return true;
+        }
+
+        private async Task<bool> ParseMetadata()
+        {
+            var metadataDocument = await DoGetAsync(_endpoint + "/$metadata");
+            if (metadataDocument != null)
+            {
+                // get entity sets
+                foreach (var entitySetElement in metadataDocument.Descendants().Where(elem => elem.Name.LocalName.Equals("EntitySet")))
+                {
+                    var collectionName = entitySetElement.Attribute("Name").Value;
+                    var typeName = entitySetElement.Attribute("EntityType").Value;
+                    _collectionToTypeMappings.Add(collectionName, typeName.Substring(typeName.LastIndexOf('.') + 1));
+                }
+            }
+            return true;
+        }
+
+        private async Task<bool> ParseAnnotations()
+        {
+            if (_annotationsUrl != null)
+            {
+                var annotationsDocument = await DoGetAsync(_annotationsUrl);
+                if (annotationsDocument != null)
+                {
+                    foreach (var descendant in annotationsDocument.Descendants().Where(elem => elem.Name.LocalName.Equals("Annotations")))
+                    {
+                        var target = descendant.Attribute("Target").Value;
+                        foreach (var valueAnnotation in descendant.Elements().Where(elem => elem.Name.LocalName.Equals("ValueAnnotation")))
+                        {
+                            var term = valueAnnotation.Attribute("Term").Value.Replace("DataBrowser.", "http://brightstardb.databrowser.annotations/");
+                            if (valueAnnotation.Attribute("String")!=null)
+                            {
+                                var val = valueAnnotation.Attribute("String").Value;
+                                var annotation = new Annotation(target, term, val);
+                                _annotations.Add(annotation);
+                            } else if (valueAnnotation.Attribute("Boolean") != null)
+                            {
+                                var val = valueAnnotation.Attribute("Boolean").Value;
+                                var annotation = new Annotation(target, term, val);
+                                _annotations.Add(annotation);                                
+                            } else
+                            {
+                                continue;
+                            }
+                        }
+
+                    }
+                }
+            }
+            return true;
         }
 
         private async Task<XDocument> DoGetAsync(string query)
@@ -58,6 +136,38 @@ namespace DataBrowser.Providers
                     var rt = new ResourceType(this);
                     rt.Identity = collection.Uri;
                     rt.Title = collection.Title.Text;
+
+                    // check for type annotations
+                    var collectionName = collection.NodeValue;
+                    if (collectionName != null)
+                    {
+                        // get type name from collection name
+                        string typeName;
+                        if (!_collectionToTypeMappings.TryGetValue(collectionName, out typeName))
+                        {
+                            continue;
+                        }
+
+                        // get type annotations
+                        var annotations = _annotations.Where(a => a.Target.Equals(typeName)).ToList();
+                        if (annotations.Count > 0)
+                        {
+                            // try and get a display name
+                            var displayNameAnnotation = annotations.FirstOrDefault(a => a.Property.Equals(Annotation.DisplayName));
+                            if (displayNameAnnotation != null)
+                            {
+                                rt.Title = displayNameAnnotation.Value;
+                            }
+                            
+                            // try and get an image
+                            var imageAnnotation = annotations.FirstOrDefault(a => a.Property.Equals(Annotation.ThumbnailUrl));
+                            if (imageAnnotation != null && Uri.IsWellFormedUriString(imageAnnotation.Value, UriKind.Absolute))
+                            {
+                                rt.Image = new Uri(imageAnnotation.Value);
+                            }
+                        }
+                    }
+
                     resourceTypes.Add(rt);
                 }
 
@@ -78,9 +188,7 @@ namespace DataBrowser.Providers
                 DataCache.Instance.Cache(type.Identity.AbsoluteUri, entries);
             }
 
-
             var resources = new List<Resource>();
-            var resourceIndex = new Dictionary<string, Resource>();
             foreach (var entry in entries.Items)
             {
                 var resource = new Resource(this, type);
@@ -105,7 +213,6 @@ namespace DataBrowser.Providers
 
             return resources;
         }
-
 
         public async Task<List<Resource>> GetResources(Uri collectionUri, ResourceType type)
         {
@@ -194,10 +301,12 @@ namespace DataBrowser.Providers
                         foreach (var prop in item.ElementExtensions)
                         {
                             if (string.IsNullOrEmpty(prop.NodeValue)) continue;
-                            var property = new Property(this, null);
-                            property.PropertyName = prop.NodeName;
-                            property.PropertyValue = prop.NodeValue;
-                            property.IsLiteral = true;
+                            var property = new Property(this, null)
+                                               {
+                                                   PropertyName = prop.NodeName,
+                                                   PropertyValue = prop.NodeValue,
+                                                   IsLiteral = true
+                                               };
                             properties.Add(property);
                         }
                     }

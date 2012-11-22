@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="DataCache.cs" />
     <Compile Include="PropertyStyleSelector.cs" />
+    <Compile Include="Providers\Annotation.cs" />
     <Compile Include="Providers\IProvider.cs" />
     <Compile Include="Providers\Utils.cs" />
     <Compile Include="WebPage.xaml.cs">

@@ -44,8 +44,7 @@ namespace DataBrowser
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
             UiThreadDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-            // TODO: Assign a bindable collection of items to this.DefaultViewModel["Items"]
-            this.DefaultViewModel["Items"] = Context.Contexts;
+            DefaultViewModel["Items"] = Context.Contexts;
         }
 
         private void Context_ItemClick(object sender, ItemClickEventArgs e)

@@ -25,7 +25,7 @@ namespace DataBrowser.Model
                                         new Context("Netflix", "Netflix OData endpoint",
                                                     new ODataProvider("http://odata.netflix.com/v2/Catalog/")),
                                         new Context("WebNodes", "WedNodes OData endpoint",
-                                                    new ODataProvider("http://demo.webnodes.com/odata/")),
+                                                    new ODataProvider("http://demo.webnodes.com/odata/", "http://demo.webnodes.com/waf/services/odataannotations.ashx")),
                                         new Context("Local B*", "Testing Sparql",
                                                     new SparqlEndpointProvider(
                                                         "http://localhost:8081/bs370/sparql"))
