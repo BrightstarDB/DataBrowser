@@ -178,12 +178,38 @@ namespace DataBrowser.Providers
             }
         }
 
+        private Uri GetImageUrl(SyndicationItem item)
+        {
+            // get category
+            var category = item.Categories.FirstOrDefault();
+            if (category != null)
+            {
+                var typeName = category.Term.Substring(category.Term.LastIndexOf('.') + 1);
+                if (item.Content.Type.Equals("application/xml"))
+                {
+                    var properties = item.Content.Xml;
+                    foreach (var p in properties.FirstChild.ChildNodes)
+                    {
+                        var annotation =
+                            _annotations.FirstOrDefault(a => a.Target.Equals(typeName + "/" + p.LocalName) &&
+                                                             a.Property.Equals(Annotation.IsThumnbnailUrl));
+
+                        if (annotation != null) return new Uri(p.InnerText);
+                    }
+                } else
+                {
+                    
+                }
+            }
+            return null;
+        }
+
         public async Task<List<Resource>> GetResources(ResourceType type)
         {
             var entries = DataCache.Instance.Lookup<SyndicationFeed>(type.Identity.AbsoluteUri);
             if (entries == null)
             {
-                AtomPubClient client = new AtomPubClient();
+                var client = new AtomPubClient();
                 entries = await client.RetrieveFeedAsync(type.Identity);
                 DataCache.Instance.Cache(type.Identity.AbsoluteUri, entries);
             }
@@ -191,9 +217,8 @@ namespace DataBrowser.Providers
             var resources = new List<Resource>();
             foreach (var entry in entries.Items)
             {
-                var resource = new Resource(this, type);
-                resource.Identity = new Uri(entry.Id);
-                resource.Title = entry.Title.Text;
+                var resource = new Resource(this, type) {Identity = new Uri(entry.Id), Title = entry.Title.Text};
+                resource.Image = GetImageUrl(entry);
                 resources.Add(resource);
             }
 

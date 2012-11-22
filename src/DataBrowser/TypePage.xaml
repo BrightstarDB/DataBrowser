@@ -25,20 +25,59 @@
             <Setter Property="Margin" Value="12,0,12,2"/>
         </Style>
 
-        <DataTemplate x:Key="DefaultGridItemTemplate">
-            <Grid HorizontalAlignment="Left" Width="150" Height="150">
-                <Border Background="{StaticResource BlockBackgroundBrush}" />
-                <TextBlock Text="{Binding Title}" Style="{StaticResource GridTitleTextStyle}"/>
-            </Grid>
-        </DataTemplate>
-
-        <DataTemplate x:Key="GridItemTemplate">
+        <!-- DataTemplate x:Key="GridItemTemplate">
             <Grid HorizontalAlignment="Left" Width="200" Height="200" Margin="5">
                 <StackPanel Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
                     <TextBlock Text="{Binding Title}" Foreground="White" Style="{StaticResource GridTitleTextStyle}" />
                 </StackPanel>
             </Grid>
+        </DataTemplate -->
+
+        <DataTemplate x:Key="GridItemTemplate">
+            <Grid HorizontalAlignment="Center" Width="200" Height="200" Margin="5">
+                <Border x:Name="TileImage" Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Opacity="0">
+                    <Border.RenderTransform>
+                        <CompositeTransform />
+                    </Border.RenderTransform>
+                    <Image Stretch="UniformToFill">
+                        <Image.Source>
+                            <BitmapImage UriSource="{Binding Image}" />
+                        </Image.Source>
+                        <Image.Triggers>
+                            <EventTrigger RoutedEvent="Image.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever">
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TileTitle" Storyboard.TargetProperty="Opacity">
+                                            <EasingDoubleKeyFrame KeyTime="0" Value="1.0" />
+                                            <EasingDoubleKeyFrame KeyTime="0:0:4.5" Value="1.0" />
+                                            <EasingDoubleKeyFrame KeyTime="0:0:5" Value="0" />
+                                            <EasingDoubleKeyFrame KeyTime="0:0:9.5" Value="0" />
+                                            <EasingDoubleKeyFrame KeyTime="0:0:10" Value="1.0" />
+                                        </DoubleAnimationUsingKeyFrames>
+
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TileImage" Storyboard.TargetProperty="Opacity">
+                                            <EasingDoubleKeyFrame KeyTime="0" Value="0" />
+                                            <EasingDoubleKeyFrame KeyTime="0:0:4.5" Value="0" />
+                                            <EasingDoubleKeyFrame KeyTime="0:0:5" Value="1.0" />
+                                            <EasingDoubleKeyFrame KeyTime="0:0:9.5" Value="1.0" />
+                                            <EasingDoubleKeyFrame KeyTime="0:0:10" Value="0" />
+                                        </DoubleAnimationUsingKeyFrames>
+
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>
+                </Border>
+                <TextBlock UseLayoutRounding="True" x:Name="TileTitle" HorizontalAlignment="Center" Text="{Binding Title}" Foreground="White" Style="{StaticResource GridTitleTextStyle}">
+                    <TextBlock.RenderTransform>
+                        <CompositeTransform />
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </Grid>
         </DataTemplate>
+
+
     </Page.Resources>
 
     <!--
