@@ -80,13 +80,14 @@ namespace DataBrowser.Providers
             return instances;
         }
 
-        private const string GetPropertiesQuery = "select ?prop ?value ?valueName where {{ <{0}> ?prop ?value . OPTIONAL {{ ?value <http://www.w3.org/2000/01/rdf-schema%23label> ?valueName }} }}";
+        private const string GetPropertiesQuery = "select ?prop ?value ?valueName where {{ <{0}> ?prop ?value . OPTIONAL {{ ?value <http://www.w3.org/2000/01/rdf-schema#label> ?valueName }} }}";
         public async Task<List<Property>> GetResourceProperties(Resource resource)
         {
             var properties = new List<Property>();
             var query = string.Format(GetPropertiesQuery, resource.Identity.AbsoluteUri);
+            var escapedQuery = query.Replace("#", "%23");
 
-            var doc = await DoGetAsync(query);
+            var doc = await DoGetAsync(escapedQuery);
 
             // this collection maps the type of properties that have more than three entries to
             // the collection query it uses.

@@ -22,7 +22,7 @@ namespace DataBrowser.Model
         {
             DataProvider = provider;
             Type = type;
-            Image = new Uri("http://www.brightstardb.com/images/logo.png");
+            // Image = new Uri("http://www.brightstardb.com/images/logo.png";
         }
             
     }

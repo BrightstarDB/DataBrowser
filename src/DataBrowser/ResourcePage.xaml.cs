@@ -49,13 +49,14 @@ namespace DataBrowser
             {
                 var a = _resource.DataProvider.GetResourceProperties(_resource);
                 Task.WaitAll(a);
-                var b = a.Result;
+
+                HomePage.UiThreadDispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, 
+                    () => { LoadingMessageTextBlock.Visibility=Visibility.Collapsed;});
 
                 foreach (var rt in a.Result)
                 {
                     HomePage.UiThreadDispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                    {
-                        LoadingMessageTextBlock.Visibility = Visibility.Collapsed;
+                    {                        
                         PropertyBox.Items.Add(rt);
                     });
                 }
