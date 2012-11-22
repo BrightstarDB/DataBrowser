@@ -288,9 +288,18 @@ namespace DataBrowser.Providers
         private const string XmlSchemaDataTypeNamespace = "http://www.w3.org/2001/XMLSchema#";
         private const string OdataRelationshipRelTypePrefix = "http://schemas.microsoft.com/ado/2007/08/dataservices/related/";
 
+        private bool IsPropertyVisible(string typeName, string propertyName)
+        {
+            typeName = typeName.Substring(typeName.LastIndexOf("/") + 1);
+            var hiddenAnnotation = _annotations.FirstOrDefault(a => a.Target.Equals(typeName + "/" + propertyName) 
+                                                                            && a.Property.Equals(Annotation.Hide));
+            if (hiddenAnnotation != null) return hiddenAnnotation.Value.ToLower().Equals("true");            
+            return true;
+        }
+
         public async Task<List<Property>> GetResourceProperties(Resource resource)
         {
-            AtomPubClient client = new AtomPubClient();
+            var client = new AtomPubClient();
             var res = DataCache.Instance.Lookup<SyndicationItem>(resource.Identity.AbsoluteUri);
             if (res == null)
             {
@@ -315,7 +324,7 @@ namespace DataBrowser.Providers
                         property.PropertyName = cn.LocalName.ToString();
                         property.PropertyValue = val;
                         property.IsLiteral = true;
-                        properties.Add(property);
+                        if (IsPropertyVisible(resource.Type.Identity.ToString(), property.PropertyName)) properties.Add(property);
                     }
                     catch (Exception ex)
                     {
