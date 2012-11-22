@@ -17,17 +17,17 @@
             x:Name="itemsViewSource"
             Source="{Binding Types}"/>
 
-        <SolidColorBrush x:Key="BlockBackgroundBrush" Color="#FF557EB9"/>
+        <SolidColorBrush x:Key="BlockBackgroundBrush" Color="#FF557EB9" />
 
         <!-- Grid Styles -->
         <Style x:Key="GridTitleTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BasicTextStyle}">
             <Setter Property="FontSize" Value="32.667"/>
             <Setter Property="Margin" Value="12,0,12,2"/>
         </Style>
-         
-        <DataTemplate x:Key="GridItemTemplate">                       
+                 
+        <DataTemplate x:Key="AnimatedGridItemTemplate">                       
             <Grid HorizontalAlignment="Center" Width="200" Height="200" Margin="5">                                                                
-                <Border x:Name="TileImage" Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Opacity="0">
+                <Border x:Name="TileImage" Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
                     <Border.RenderTransform>
                         <CompositeTransform />
                     </Border.RenderTransform>
@@ -66,6 +66,21 @@
                         <CompositeTransform />
                     </TextBlock.RenderTransform>
                 </TextBlock>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="GridItemTemplate">
+            <Grid HorizontalAlignment="Center" Width="200" Height="200" Margin="5">
+                <Border x:Name="TileImage" Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Opacity="0.7">
+                    <Image Stretch="UniformToFill">
+                        <Image.Source>
+                            <BitmapImage UriSource="{Binding Image}" />
+                        </Image.Source>
+                    </Image>
+                </Border>
+                <TextBlock UseLayoutRounding="True" x:Name="TileTitle" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Title}" 
+                           Foreground="White"  
+                           Style="{StaticResource GridTitleTextStyle}" />
             </Grid>
         </DataTemplate>
 
