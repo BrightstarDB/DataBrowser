@@ -1,0 +1,8 @@
+<Schema Namespace="WAF.Service" Alias="WebNodesModel" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+	<Using Namespace="brightstardb.databrowser.annotations" Alias="DataBrowser" />
+
+	<Annotations Target="Title/LargeUrl">
+		<ValueAnnotation Term="DataBrowser.IsImageUrl" Boolean="True" />
+	</Annotations>
+
+</Schema>

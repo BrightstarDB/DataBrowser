@@ -342,13 +342,30 @@ namespace DataBrowser.Providers
                         foreach (var prop in item.ElementExtensions)
                         {
                             if (string.IsNullOrEmpty(prop.NodeValue)) continue;
-                            var property = new Property(this, null)
-                                               {
-                                                   PropertyName = prop.NodeName,
-                                                   PropertyValue = prop.NodeValue,
-                                                   IsLiteral = true
-                                               };
-                            properties.Add(property);
+                            if (prop.ElementExtensions.Count > 0)
+                            {
+                                foreach (var innerprop in prop.ElementExtensions)
+                                {
+                                    if (string.IsNullOrEmpty(innerprop.NodeValue)) continue;
+                                    var property = new Property(this, null)
+                                    {
+                                        PropertyName = prop.NodeName + innerprop.NodeName,
+                                        PropertyValue = innerprop.NodeValue,
+                                        IsLiteral = true
+                                    };
+                                    properties.Add(property);
+                                }
+                            }
+                            else
+                            {
+                                var property = new Property(this, null)
+                                                   {
+                                                       PropertyName = prop.NodeName,
+                                                       PropertyValue = prop.NodeValue,
+                                                       IsLiteral = true
+                                                   };
+                                properties.Add(property);
+                            }
                         }
                     }
                 }
@@ -366,12 +383,13 @@ namespace DataBrowser.Providers
                 {
                     try
                     {
-                        AtomPubClient relatedResourceClient = new AtomPubClient();
                         var relatedResource = await client.RetrieveResourceAsync(syndicationLink.Uri);
-                        var property = new Property(this, null);
-                        property.PropertyName = propertyName;
-                        property.PropertyValue = syndicationLink.Uri.ToString();
-                        property.PropertyValueName = relatedResource.Title.Text;
+                        var property = new Property(this, null)
+                                           {
+                                               PropertyName = propertyName,
+                                               PropertyValue = syndicationLink.Uri.ToString(),
+                                               PropertyValueName = relatedResource.Title.Text
+                                           };
                         properties.Add(property);
                     }
                     catch (Exception)
