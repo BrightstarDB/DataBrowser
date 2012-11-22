@@ -152,6 +152,13 @@ namespace DataBrowser.Providers
                         var annotations = _annotations.Where(a => a.Target.Equals(typeName)).ToList();
                         if (annotations.Count > 0)
                         {
+                            // see if we should hide the type
+                            var hideAnnotation = annotations.FirstOrDefault(a => a.Property.Equals(Annotation.Hide));
+                            if (hideAnnotation != null && hideAnnotation.Value.Equals("True"))
+                            {
+                                continue;                                
+                            }
+
                             // try and get a display name
                             var displayNameAnnotation = annotations.FirstOrDefault(a => a.Property.Equals(Annotation.DisplayName));
                             if (displayNameAnnotation != null)

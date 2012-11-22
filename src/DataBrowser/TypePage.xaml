@@ -35,7 +35,7 @@
 
         <DataTemplate x:Key="GridItemTemplate">
             <Grid HorizontalAlignment="Center" Width="200" Height="200" Margin="5">
-                <Border x:Name="TileImage" Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Opacity="0.7">
+                <Border x:Name="TileImage" Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Opacity="0.5">
                     <Image Stretch="UniformToFill">
                         <Image.Source>
                             <BitmapImage UriSource="{Binding Image}" />
