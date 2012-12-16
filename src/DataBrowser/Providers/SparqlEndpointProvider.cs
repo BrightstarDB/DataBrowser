@@ -24,12 +24,20 @@ namespace DataBrowser.Providers
 
         private async Task<XDocument> DoGetAsync(string query)
         {
-            var request = WebRequest.CreateHttp(_endpoint + "?query=" + query);
-            using (var response = await request.GetResponseAsync())
+            try
             {
-                var doc = XDocument.Load(new StreamReader(response.GetResponseStream()));
-                return doc;
+                var request = WebRequest.CreateHttp(_endpoint + "?query=" + query);
+                using (var response = await request.GetResponseAsync())
+                {
+                    var doc = XDocument.Load(new StreamReader(response.GetResponseStream()));
+                    return doc;
+                }
             }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+            }
+            return null;
         }
 
         private const string TypesQuery = "select distinct ?type ?typeName where { ?a a ?type . ?type <http://www.w3.org/2000/01/rdf-schema%23label> ?typeName }"; 
